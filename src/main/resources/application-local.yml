@@ -1,0 +1,4 @@
+elasticsearch:
+  ip: localhost:9200
+  index:
+    prefix: local_
