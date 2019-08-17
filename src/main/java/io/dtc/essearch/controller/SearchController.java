@@ -19,6 +19,10 @@ import io.dtc.essearch.service.SearchService;
 @RestController
 @RequestMapping("/api/v1/search")
 public class SearchController {
+	
+	private static final int PAGE_DEFAULT = 0;
+	private static final int LIMIT_PER_PAGE = 10;
+	private static final String DELIMITER = ",";
 
     private SearchService<Product> searchService;
 
@@ -36,7 +40,7 @@ public class SearchController {
     @GetMapping("/query")
     public ResponseEntity<?> doSearchAndFilterByPattern(@RequestParam(name = "q") String criterial, @RequestParam(name = "rate") Optional<String> rateOpt, @RequestParam(name = "price") Optional<String> priceOpt, @RequestParam(name = "offset") Optional<Integer> offsetOpt, @RequestParam(name = "limit") Optional<Integer> limitOpt) throws IOException {
         if (criterial == null) {
-            return ResponseEntity.ok().body("Kindly check search pattern.");
+            return ResponseHelper.failResponse("Kindly check search pattern.", null);
         }
 
         Map<String, String> filterMap = new HashMap<>();
@@ -46,7 +50,7 @@ public class SearchController {
 
         Map<String, String> priceMap = new HashMap<>();
         if (priceOpt.isPresent() && !priceOpt.get().isEmpty()){
-            String[] priceRangeArray = priceOpt.get().split(",");
+            String[] priceRangeArray = priceOpt.get().split(DELIMITER);
             priceMap.put("from", priceRangeArray[0]);
             
             if (priceRangeArray.length > 1) {
@@ -54,10 +58,10 @@ public class SearchController {
             }
         }
 
-        int offset = offsetOpt.orElse(0);
-        int limit = limitOpt.orElse(10);
+        int offset = offsetOpt.orElse(PAGE_DEFAULT);
+        int limit = limitOpt.orElse(LIMIT_PER_PAGE);
 
-        List<Product> result = this.searchService.doSearchWithFilter(criterial, filterMap, priceMap, offset, limit);
+        List<Product> result = this.searchService.doSearch(criterial, filterMap, priceMap, offset, limit);
         return ResponseHelper.successResponse(result);
     };
 }

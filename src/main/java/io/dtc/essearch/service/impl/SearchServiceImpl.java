@@ -35,7 +35,7 @@ public class SearchServiceImpl implements SearchService<Product> {
     }
 
     @Override
-    public List<Product> doSearchWithFilter(String criterial, Map<String, String> filterMap, Map<String, String> priceMap, int offset, int limit) throws IOException {
+    public List<Product> doSearch(String criterial, Map<String, String> filterMap, Map<String, String> priceMap, int offset, int limit) throws IOException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         BoolQueryBuilder queryBuilder = this.getSearchSourceBuilder(criterial);

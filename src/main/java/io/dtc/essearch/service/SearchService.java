@@ -19,5 +19,5 @@ public interface SearchService<T> {
      * @return List of type parameter
      * @throws IOException
      */
-    List<T> doSearchWithFilter(String criterial, Map<String, String> filterMap, Map<String, String> priceMap, int offset, int limit) throws IOException;
+    List<T> doSearch(String criterial, Map<String, String> filterMap, Map<String, String> priceMap, int offset, int limit) throws IOException;
 }
